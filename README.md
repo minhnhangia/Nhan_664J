@@ -24,13 +24,13 @@
 > - **Those underscores in tracers.py are hiding something useful...**
 
 ### What you should be seeing when you run `python main.py` (windows are resized)
-![example_output](https://github.com/user-attachments/assets/875732bd-2e18-4be7-8b63-b024810c8c20)
+![example_output](./assets/example_output.png)
 
 ### Example solution for proper detections:
-![example_detections](https://github.com/user-attachments/assets/9f8cb850-3bb3-4b45-96ed-7250d30e3f6f)
+![example_detections](./assets/example_detections.png)
 
 ### Example solution for tracing the white car:
-![output](https://github.com/user-attachments/assets/ee82ab93-afb3-4040-bf2e-027cd45ca637)
+![example_solution](./assets/example_white.png)
 
 ### Live example of tracing solution:
-![example_trace](https://github.com/user-attachments/assets/56a02a56-b635-4481-8875-35e8ee8689b9)
+![example_trace](./assets/example_trace.gif)
