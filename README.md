@@ -24,7 +24,7 @@
 > - **Those underscores in tracers.py are hiding something useful...**
 
 ### What you should be seeing when you run `python main.py` (windows are resized)
-![example_output](./assets/example_output.png)
+![example_output](./assets/example_output.jpeg)
 
 ### Example solution for proper detections:
 ![example_detections](./assets/example_detections.png)
