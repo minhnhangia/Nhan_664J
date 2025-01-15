@@ -5,7 +5,7 @@ import threading
 import queue
 
 video_path = "./videos/drone_footage.mp4"
-model_path = "./model/road_v1.pt"
+model_path = "./model/road_v2.pt"
 bg_path = "./bg.png"
 
 if __name__ == "__main__":
