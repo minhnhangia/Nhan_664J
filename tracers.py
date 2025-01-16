@@ -13,21 +13,23 @@ class CarTracer:
         self.previous_track = None
         self.lower_white = np.array([0, 0, 200])  # HSV lower bound for white
         self.upper_white = np.array([180, 50, 255])  # HSV upper bound for white
+        self.frame_count = 0
+        self.mask = None
 
     def plot_contours(self, frame):
         # detects white regions, filters them based on area, and draws bounding boxes
         contour_boxes = []
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        mask = cv2.inRange(hsv, self.lower_white, self.upper_white)
+        self.mask = cv2.inRange(hsv, self.lower_white, self.upper_white)
 
         ### hierarchy to focus on parent contours, filtering out irrelevant contours
-        contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        contours, hierarchy = cv2.findContours(self.mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         #print(f"Hierarchy: {hierarchy}")
         for i, contour in enumerate(contours):
-        # Use hierarchy to filter top-level contours
-            if hierarchy[0][i][3] == -1:  # Check if the contour has no parent
+        # use hierarchy to filter top-level contours
+            if hierarchy[0][i][3] == -1:  # check if the contour has no parent
                 area = cv2.contourArea(contour)
-                if 200 < area < 300:  # Filter based on area
+                if 200 < area < 300:  # filter based on area
                     cx, cy, cw, ch = cv2.boundingRect(contour)
                     contour_boxes.append((cx, cy, cw, ch))
                     cv2.rectangle(frame, (cx, cy), (cx + cw, cy + ch), (255, 255, 255), 2)
@@ -59,13 +61,16 @@ class CarTracer:
                 box_width = int(w_norm * self.video_width)
                 box_height = int(h_norm * self.video_height)
 
-                # Match with contours
+                # check if YOLO results match with contours
                 for cx, cy, cw, ch in bounding_boxes:
                     if cx <= px <= cx + cw and cy <= py <= cy + ch and conf > 0:
                         cv2.rectangle(frame, (px - box_width//2, py - box_height//2), (px + box_width//2, py + box_height//2), (0, 255, 0), 2)  # YOLO
                         cv2.rectangle(frame, (cx, cy), (cx + cw, cy + ch), (255, 0, 0), 2)  # Contours
 
-                        if self.previous_track is not None:
+                        # draw tracing line
+                        print(self.previous_track)
+                        self.frame_count += 1
+                        if self.previous_track is not None and self.frame_count > 5:
                             cv2.line(self.bg, self.previous_track, (px, py), (0, 255, 0), 2)
                         self.previous_track = (px, py)
 
@@ -87,6 +92,7 @@ class CarTracer:
             cv2.imwrite("./submission/output.png", self.bg)
             cv2.imshow("Detections Frame", results[1])
             cv2.imshow("Filtered Frame", frame)
+            cv2.imshow("White Mask", self.mask)
             if cv2.waitKey(1) & 0xFF == ord("q"):
                 cv2.destroyAllWindows()
                 return

@@ -14,7 +14,7 @@ class VehicleDetector:
                 frame = frame_queue.get()
                 
                 # only detections with conf and iou within thresholds are processed
-                results = self.model(frame, conf=0.2, iou=0.8, verbose=False)[0]    ### decreased confidence threshold
+                results = self.model(frame, conf=0.15, iou=0.8, verbose=False)[0]    ### decreased confidence threshold
 
                 inf_msg = self.get_inference_data(results)
                 results_queue.put(inf_msg)
@@ -35,7 +35,7 @@ class VehicleDetector:
             if self.model.names[c] != "car":
                 continue  ### Only process car detections
             
-            # cv2.rectangle(image, start_point, end_point)
+            # cv2.rectangle(image, start_point (top left), end_point (bottom right))
             # draw bounding box
             cv2.rectangle(
                 annotated_frame, (x1, y1), (x2, y2), color=(255, 0, 0), thickness=2
