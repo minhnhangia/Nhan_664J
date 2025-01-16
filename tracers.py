@@ -14,6 +14,7 @@ class CarTracer:
         self.upper_white = np.array([180, 50, 255])  # HSV upper bound for white
 
     def plot_contours(self, frame):
+        # detects white regions, filters them based on area, and draws bounding boxes
         contour_boxes = []
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         mask = cv2.inRange(hsv, self.lower_white, self.upper_white)
@@ -21,6 +22,7 @@ class CarTracer:
         for contour in contours:
             area = cv2.contourArea(contour)
             if area > 200:
+                # draws bounding boxes around detected white regions
                 cx, cy, cw, ch = cv2.boundingRect(contour)
                 contour_boxes.append((cx, cy, cw, ch))
                 cv2.rectangle(frame, (cx, cy), (cx + cw, cy + ch), (0, 255, 0), 2)

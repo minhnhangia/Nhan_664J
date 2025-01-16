@@ -9,15 +9,16 @@ model_path = "./model/road_v2.pt"
 bg_path = "./bg.png"
 
 if __name__ == "__main__":
-    frame_queue = queue.Queue()
-    results_queue = queue.Queue()
+    frame_queue = queue.Queue()     # share frames between video streamer and detector     
+    results_queue = queue.Queue()   # share detection results between detector and tracer
 
-    streamer = VideoReader(video_path)
-    video_width, video_height = streamer.get_video_properties()
+    streamer = VideoReader(video_path)  # stream frames from video file
+    video_width, video_height = streamer.get_video_properties() # frame dimentsions
 
-    detector = VehicleDetector(model_path)
-    tracer = CarTracer(bg_path, video_width, video_height)
+    detector = VehicleDetector(model_path)  # detect vehicles using YOLO model
+    tracer = CarTracer(bg_path, video_width, video_height)  # traces detected vehicles + visualizations
 
+    # enables simultaneous streaming and detection
     streamer_thread = threading.Thread(target=streamer.stream, args=(frame_queue,))
     detection_thread = threading.Thread(
         target=detector.detect,
