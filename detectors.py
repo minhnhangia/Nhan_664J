@@ -66,5 +66,14 @@ class VehicleDetector:
 
         confs = boxes.conf  # confidence scores
         coords = boxes.xywhn
+
+        """
+        results[0]: Original frame (unmodified).
+        results[1]: Annotated frame with bounding boxes and labels.
+        results[2]: Normalized bounding box coordinates (xywhn).
+        results[3]: Class IDs (cls).
+        results[4]: Confidence scores (conf).
+        """
         inf_msg = (frame, annotated_frame, coords, boxes.cls, confs)
+
         return inf_msg
